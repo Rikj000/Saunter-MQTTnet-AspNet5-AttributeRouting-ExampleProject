@@ -25,7 +25,7 @@ namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Controllers.Mq
         }
 
         [MqttRoute(WildCard)] // Generate MQTT Attribute Routing for this Topic
-        [Channel(WildCard)] // Create a Channel & Generate AsyncAPI Documentation
+        [Channel("#")] // Create a Channel & Generate AsyncAPI Documentation
         [PublishOperation(Summary = "Catches all Publishes done to the MQTTnet Broker.")]
         public Task WildCardMatchTopic(string topic)
         {

@@ -49,7 +49,7 @@ namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Controllers.Mq
         }
         
         [MqttRoute(PubWeatherReport)] // Generate MQTT Attribute Routing for this Topic
-        [Channel(Prefix + PubWeatherReport)] // Create a Channel & Generate AsyncAPI Documentation
+        [Channel(Prefix + Pub + "+/temperature")] // Create a Channel & Generate AsyncAPI Documentation
         [PublishOperation(
             Summary = "Publishes a 'WeatherReport' Payload to the '" + Prefix + PubWeatherReport + "' Topic.")]
         public Task PublishWeatherReport(int zipCode)
