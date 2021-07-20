@@ -69,7 +69,7 @@ namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Services
         {
             return Task.Run(() =>
             {
-                Console.WriteLine($"{DateTime.Now.ToString(CultureInfo.InvariantCulture)} - MQTT Message Received:{_newLine}" +
+                Console.WriteLine($"{DateTime.Now.ToString(CultureInfo.InvariantCulture)} - MQTT Message Logged:{_newLine}" +
                                   $"- Topic = {eventArgs.ApplicationMessage.Topic + _newLine}" + 
                                   $"- Payload = {Encoding.UTF8.GetString(eventArgs.ApplicationMessage.Payload) + _newLine}" +
                                   $"- QoS = {eventArgs.ApplicationMessage.QualityOfServiceLevel + _newLine}" + 
