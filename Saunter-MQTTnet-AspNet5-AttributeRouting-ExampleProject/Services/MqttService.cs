@@ -111,7 +111,7 @@ namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Services
 
                 var msg = new MqttApplicationMessageBuilder()
                     .WithPayload($"MQTTnet hosted on {frameworkName} has started up!")
-                    .WithTopic("kiss-message");
+                    .WithTopic("MqttService/publish/kiss-message");
 
                 while (true)
                 {
