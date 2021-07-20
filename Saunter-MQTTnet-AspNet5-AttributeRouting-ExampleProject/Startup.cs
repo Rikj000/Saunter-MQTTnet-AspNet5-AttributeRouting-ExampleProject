@@ -77,11 +77,7 @@ namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject
             services.AddAsyncApiSchemaGeneration(options =>
             {
                 // Specify example type(s) from assemblies to scan.
-                /*options.AssemblyMarkerTypes = new[]
-                {
-                    typeof(ExampleController)
-                    // typeof(CatchAllController)
-                };*/
+                options.AssemblyMarkerTypes = new[] {typeof(ExampleController)};
 
                 // Build as much (or as little) of the AsyncApi document as you like.
                 // Saunter will generate Channels, Operations, Messages, etc, but you may want to specify Info here.
@@ -89,8 +85,9 @@ namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject
                 {
                     Info = new Info(_appSettings.ApplicationName, _appSettings.ApplicationVersion)
                     {
-                        Description = "Example project implementing Saunter with MQTTnet Attribute Routing in ASP.NET 5",
-                        License = new License("Apache 2.0") { Url = "https://www.apache.org/licenses/LICENSE-2.0" }
+                        Description =
+                            "Example project implementing Saunter with MQTTnet Attribute Routing in ASP.NET 5",
+                        License = new License("Apache 2.0") {Url = "https://www.apache.org/licenses/LICENSE-2.0"}
                     },
                     Servers =
                     {
