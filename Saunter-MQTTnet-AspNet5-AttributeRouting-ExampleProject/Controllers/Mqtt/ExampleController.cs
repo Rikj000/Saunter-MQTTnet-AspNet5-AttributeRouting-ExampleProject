@@ -17,7 +17,7 @@ namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Controllers.Mq
     public class ExampleController : MqttBaseController // Inherit from MqttBaseController for convenience functions
     {
         #region Variable Declarations
-        private const string Prefix = nameof(ExampleController); // Defines the Route Prefix for the Topics
+        private const string Prefix = nameof(ExampleController) + "/"; // Defines the Route Prefix for the Topics
         private const string Pub = "publish/";
         private const string Sub = "subscribe/";
         private readonly AppSettings _appSettings;
@@ -39,9 +39,8 @@ namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Controllers.Mq
         #region Publish & Subscribe Topics
         
         [MqttRoute(PubTest)] // Generate MQTT Attribute Routing for this Topic
-        [Channel(PubTest)] // Create a Channel & Generate AsyncAPI Documentation
-        [PublishOperation(typeof(Task), 
-            Summary = "Publishes a 'Test' Payload to the '" + Prefix + "/" + PubTest + "' Topic.")]
+        [Channel(Prefix + PubTest)] // Create a Channel & Generate AsyncAPI Documentation
+        [PublishOperation(Summary = "Publishes a 'Test' Payload to the '" + Prefix + PubTest + "' Topic.")]
         public Task PublishTest()
         {
             var payloadMessage = BitConverter.ToString(Message.Payload);
@@ -50,9 +49,9 @@ namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Controllers.Mq
         }
         
         [MqttRoute(PubWeatherReport)] // Generate MQTT Attribute Routing for this Topic
-        [Channel(PubWeatherReport)] // Create a Channel & Generate AsyncAPI Documentation
-        [PublishOperation(typeof(Task), 
-            Summary = "Publishes a 'WeatherReport' Payload to the '" + Prefix + "/" + PubWeatherReport + "' Topic.")]
+        [Channel(Prefix + PubWeatherReport)] // Create a Channel & Generate AsyncAPI Documentation
+        [PublishOperation(
+            Summary = "Publishes a 'WeatherReport' Payload to the '" + Prefix + PubWeatherReport + "' Topic.")]
         public Task PublishWeatherReport(int zipCode)
         {
             // We have access to the MqttContext
