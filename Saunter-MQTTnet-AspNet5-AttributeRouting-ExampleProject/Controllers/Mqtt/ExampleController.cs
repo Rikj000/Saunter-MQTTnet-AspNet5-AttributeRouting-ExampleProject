@@ -5,7 +5,7 @@ using Saunter.Attributes;
 using System.Text;
 using System.Threading.Tasks;
 using System;
-using MQTTnet;
+using Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Helpers;
 using Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Models;
 #endregion Using Imports
 
