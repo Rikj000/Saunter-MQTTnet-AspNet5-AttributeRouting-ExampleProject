@@ -20,7 +20,7 @@ An example project that implements following packages in a ASP.NET 5 MQTT Broker
   - `ExampleController/publish/test`
     - Payload: `string`
 - The [**MqttService**](https://github.com/Rikj000/Saunter-MQTTnet-AspNet5-AttributeRouting-ExampleProject/blob/main/Saunter-MQTTnet-AspNet5-AttributeRouting-ExampleProject/Services/MqttService.cs) has been implemented with following Subscribe Topic:
-  - `MqttService/publish/kiss-message`
+  - `MqttService/subscribe/kiss-message`
     - It will send a Payload every 5 minutes after a client has connected
     - Payload: `$"MQTTnet hosted on {frameworkName} is still running at {DateTime.Now}!"`
   - Here you can also configure various MQTT Broker related settings / handlers
