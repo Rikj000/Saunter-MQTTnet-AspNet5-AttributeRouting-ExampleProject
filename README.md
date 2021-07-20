@@ -4,7 +4,7 @@ An example project that implements following packages in a ASP.NET 5 MQTT Broker
 ## Current Implemented Package Status:
 - [**MQTTnet**](https://github.com/chkr1011/MQTTnet) - `v3.0.16` - Working
 - [**MQTTnet - AspNetCore - AttributeRouting**](https://github.com/Atlas-LiftTech/MQTTnet.AspNetCore.AttributeRouting) - `v3.0.16` (Forked, see [NuGet](https://www.nuget.org/packages/MQTTnet.AspNetCore.AttributeRouting.Forked/)) - Working
-- [**Saunter**](https://github.com/tehmantra/saunter) - `v0.3.1` - Implemented, UI & generated json hosted, but not generating MQTT Publish/Subscribe Topic Documentation.
+- [**Saunter**](https://github.com/tehmantra/saunter) - `v0.3.1` - Working
 
 ## Some Notes:
 - Tested with [**MQTTnet.App**](https://github.com/chkr1011/MQTTnet.App) as the client, configured as following:
