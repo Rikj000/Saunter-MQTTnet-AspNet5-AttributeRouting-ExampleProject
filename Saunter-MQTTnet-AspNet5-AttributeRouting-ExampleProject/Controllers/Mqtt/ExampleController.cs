@@ -11,7 +11,6 @@ using Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Models;
 
 namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Controllers.Mqtt
 {
-    [AsyncApi] // Tells Saunter to scan the Controller
     [MqttController] // Generate MQTT Attribute Routing for the Controller
     [MqttRoute(nameof(ExampleController))] // Defines the Route Prefix for the Controller
     public class ExampleController : MqttBaseController // Inherit from MqttBaseController for convenience functions
@@ -37,21 +36,22 @@ namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Controllers.Mq
         }
         
         #region Publish & Subscribe Topics
-        
+
+        /// <summary>
+        /// Publishes a test payload to the test topic
+        /// </summary>
         [MqttRoute(PubTest)] // Generate MQTT Attribute Routing for this Topic
-        [Channel(Prefix + PubTest)] // Create a Channel & Generate AsyncAPI Documentation
-        [PublishOperation(Summary = "Publishes a 'Test' Payload to the '" + Prefix + PubTest + "' Topic.")]
         public Task PublishTest()
         {
             var payloadMessage = BitConverter.ToString(Message.Payload);
             Console.WriteLine("Test Payload Received! Payload String Content: " +  Message.Payload);
             return Ok();
         }
-        
+
+        /// <summary>
+        /// Publishes a weather report to the weather report topic
+        /// </summary>
         [MqttRoute(PubWeatherReport)] // Generate MQTT Attribute Routing for this Topic
-        [Channel(Prefix + Pub + "+/temperature")] // Create a Channel & Generate AsyncAPI Documentation
-        [PublishOperation(
-            Summary = "Publishes a 'WeatherReport' Payload to the '" + Prefix + PubWeatherReport + "' Topic.")]
         public Task PublishWeatherReport(int zipCode)
         {
             // We have access to the MqttContext

@@ -9,8 +9,7 @@ using MQTTnet;
 
 namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Controllers.Mqtt
 {
-    [AsyncApi] // Tells Saunter to scan the Controller
-    [MqttController] // Generate MQTT Attribute Routing for the Controller 
+    [MqttController] // Generate MQTT Attribute Routing for the Controller
     public class CatchAllController : MqttBaseController // Inherit from MqttBaseController for convenience functions
     {
         #region Variable Declarations
@@ -24,9 +23,10 @@ namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Controllers.Mq
             _logger = logger;
         }
 
+        /// <summary>
+        /// Catches all Publishes done to the MQTTnet Broker.
+        /// </summary>
         [MqttRoute(WildCard)] // Generate MQTT Attribute Routing for this Topic
-        [Channel("#")] // Create a Channel & Generate AsyncAPI Documentation
-        [PublishOperation(Summary = "Catches all Publishes done to the MQTTnet Broker.")]
         public Task WildCardMatchTopic(string topic)
         {
             // We have access to the MqttContext

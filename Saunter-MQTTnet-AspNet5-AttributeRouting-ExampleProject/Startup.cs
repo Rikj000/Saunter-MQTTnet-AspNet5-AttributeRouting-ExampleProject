@@ -16,6 +16,8 @@ using Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Controllers.Mqtt;
 using Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Models;
 using Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Services;
 using System.Linq;
+using Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Filters;
+
 #endregion Using Imports
 
 /*
@@ -78,6 +80,8 @@ namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject
             {
                 // Specify example type(s) from assemblies to scan.
                 options.AssemblyMarkerTypes = new[] {typeof(ExampleController)};
+
+                options.DocumentFilters.Add(new MqttNetAspNetCoreAttributeRoutingDocumentFilter());
 
                 // Build as much (or as little) of the AsyncApi document as you like.
                 // Saunter will generate Channels, Operations, Messages, etc, but you may want to specify Info here.
