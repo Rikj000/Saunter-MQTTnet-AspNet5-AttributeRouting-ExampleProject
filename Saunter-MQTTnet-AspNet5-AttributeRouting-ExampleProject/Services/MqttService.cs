@@ -1,15 +1,21 @@
 ﻿#region Using Imports
-using MQTTnet.AspNetCore.AttributeRouting;
-using MQTTnet.AspNetCore;
-using MQTTnet.Client.Receiving;
-using MQTTnet.Server;
-using MQTTnet;
+
+using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
-using System;
+using Microsoft.Extensions.Logging;
+using MQTTnet;
+using MQTTnet.AspNetCore;
+using MQTTnet.AspNetCore.AttributeRouting;
+using MQTTnet.Client.Receiving;
+using MQTTnet.Server;
+using Saunter.Attributes;
+using Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Models;
+
 #endregion Using Imports
 
 namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Services
@@ -60,7 +66,7 @@ namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Services
             // Enable Attribute Routing
             // By default, messages published to topics that don't match any routes are rejected. 
             // Change this to true to allow those messages to be routed without hitting any controller actions.
-            options.WithAttributeRouting(allowUnmatchedRoutes: true);
+            options.WithAttributeRouting(true);
         }
 
         public void ConfigureMqttServer(IMqttServer mqtt)
@@ -81,24 +87,27 @@ namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Services
 
         public Task ValidateConnectionAsync(MqttConnectionValidatorContext context)
         {
-            return Task.Run(() => { Console.WriteLine("ValidateConnectionAsync Handler Triggered"); });
+            return Task.Run(() => { Console.WriteLine($"{DateTime.Now.ToString(CultureInfo.InvariantCulture)} - " +
+                                                      "ValidateConnectionAsync Handler Triggered"); });
         }
 
         public Task HandleApplicationMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs eventArgs)
         {
             return Task.Run(() =>
             {
-                Console.WriteLine($"{DateTime.Now.ToString(CultureInfo.InvariantCulture)} - MQTT Message Logged:{_newLine}" +
-                                  $"- Topic = {eventArgs.ApplicationMessage.Topic + _newLine}" + 
-                                  $"- Payload = {Encoding.UTF8.GetString(eventArgs.ApplicationMessage.Payload) + _newLine}" +
-                                  $"- QoS = {eventArgs.ApplicationMessage.QualityOfServiceLevel + _newLine}" + 
-                                  $"- Retain = {eventArgs.ApplicationMessage.Retain + _newLine}");
+                Console.WriteLine(
+                    $"{DateTime.Now.ToString(CultureInfo.InvariantCulture)} - Received MQTT Message Logged:{_newLine}" +
+                    $"- Topic = {eventArgs.ApplicationMessage.Topic + _newLine}" +
+                    $"- Payload = {Encoding.UTF8.GetString(eventArgs.ApplicationMessage.Payload) + _newLine}" +
+                    $"- QoS = {eventArgs.ApplicationMessage.QualityOfServiceLevel + _newLine}" +
+                    $"- Retain = {eventArgs.ApplicationMessage.Retain + _newLine}");
             });
         }
-        
+
         public Task InterceptApplicationMessagePublishAsync(MqttApplicationMessageInterceptorContext context)
         {
-            return Task.Run(() => { Console.WriteLine("InterceptApplicationMessagePublishAsync Handler Triggered"); });
+            return Task.Run(() => { Console.WriteLine($"{DateTime.Now.ToString(CultureInfo.InvariantCulture)} - " +
+                                                      "InterceptApplicationMessagePublishAsync Handler Triggered"); });
         }
 
         #endregion Validation & Interception
@@ -107,12 +116,15 @@ namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Services
 
         public Task HandleServerStartedAsync(EventArgs eventArgs)
         {
-            return Task.Run(() => { Console.WriteLine("HandleServerStartedAsync Handler Triggered"); });
+            return Task.Run(() => { Console.WriteLine($"{DateTime.Now.ToString(CultureInfo.InvariantCulture)} - " +
+                                                      "HandleServerStartedAsync Handler Triggered"); });
+            
         }
 
         public Task HandleServerStoppedAsync(EventArgs eventArgs)
         {
-            return Task.Run(() => { Console.WriteLine("HandleServerStoppedAsync Handler Triggered"); });
+            return Task.Run(() => { Console.WriteLine($"{DateTime.Now.ToString(CultureInfo.InvariantCulture)} - " +
+                                                      "HandleServerStoppedAsync Handler Triggered"); });
         }
 
         #endregion Handle Server Actions
