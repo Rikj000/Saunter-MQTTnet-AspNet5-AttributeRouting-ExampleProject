@@ -6,14 +6,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Saunter\src\Saunter\Saunter.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
-      <PackageReference Include="MQTTnet.AspNetCore" Version="3.0.16" />
-      <PackageReference Include="MQTTnet.AspNetCore.AttributeRouting.Forked" Version="0.3.16" />
-      <PackageReference Include="MQTTnet.Extensions.WebSocket4Net" Version="3.0.16" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
+        <PackageReference Include="MQTTnet.AspNetCore" Version="3.0.16" />
+        <PackageReference Include="MQTTnet.AspNetCore.AttributeRouting.Forked" Version="0.3.16" />
+        <PackageReference Include="MQTTnet.Extensions.WebSocket4Net" Version="3.0.16" />
+        <PackageReference Include="Saunter" Version="0.4.0" />
     </ItemGroup>
 
 </Project>
