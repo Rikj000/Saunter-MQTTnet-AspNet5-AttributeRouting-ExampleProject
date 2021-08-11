@@ -14,6 +14,7 @@ using System;
 
 namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Services
 {
+    [AsyncApi] // Tells Saunter to scan the Service
     public class MqttService :
         IMqttServerConnectionValidator,
         IMqttApplicationMessageReceivedHandler,
@@ -28,10 +29,28 @@ namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Services
         #region MQTT Service & Server Configuration
 
         #region Variable Declarations
-        private static string _newLine = Environment.NewLine;
+        
+        // Default Variable Initialization
+        private readonly AppSettings _appSettings;
+        private readonly ILogger<MqttService> _logger;
+        private static readonly string _newLine = Environment.NewLine;
         public IMqttServer Server;
-        #endregion Variable Declarations
+        public List<string> connectedClientIds = new();
+        
+        private const string Prefix = nameof(MqttService) + "/"; // Defines the Route Prefix for the Topics
+        private const string Sub = "subscribe/";
 
+        // Saunter Subscribe topics
+        private const string SaunterSubKiss = Prefix + Sub + "kiss";
+
+        #endregion Variable Declarations
+        
+        public MqttService(AppSettings appSettings, ILogger<MqttService> logger)
+        {
+            _appSettings = appSettings;
+            _logger = logger;
+        }
+        
         public void ConfigureMqttServerOptions(AspNetMqttServerOptionsBuilder options)
         {
             // Configure the MQTT Server options here
@@ -102,19 +121,67 @@ namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Services
 
         public Task HandleClientConnectedAsync(MqttServerClientConnectedEventArgs eventArgs)
         {
+            return Task.Run(() =>
+            {
+                Console.WriteLine($"{DateTime.Now.ToString(CultureInfo.InvariantCulture)} - " +
+                                  "HandleClientConnectedAsync Handler Triggered");
+                
+                if(connectedClientIds.Count == 0)
+                    SubscribeKiss();
+                
+                var clientId = eventArgs.ClientId;
+                connectedClientIds.Add(clientId);
+                
+                Console.WriteLine($"{DateTime.Now.ToString(CultureInfo.InvariantCulture)} - " +
+                                  $"MQTT Client Connected:{_newLine} - ClientID = {clientId + _newLine}");
+            });
+        }
+
+        public Task HandleClientDisconnectedAsync(MqttServerClientDisconnectedEventArgs eventArgs)
+        {
+            return Task.Run(() => { 
+                Console.WriteLine($"{DateTime.Now.ToString(CultureInfo.InvariantCulture)} - " +
+                                                      "HandleClientDisconnectedAsync Handler Triggered");
+                
+                var clientId = eventArgs.ClientId;
+                connectedClientIds.Remove(clientId);
+                
+                Console.WriteLine($"{DateTime.Now.ToString(CultureInfo.InvariantCulture)} - " +
+                                  $"MQTT Client Disconnected:{_newLine} - ClientID = {clientId + _newLine}");
+            });
+        }
+
+        public Task HandleClientSubscribedTopicAsync(MqttServerClientSubscribedTopicEventArgs eventArgs)
+        {
+            return Task.Run(() => { Console.WriteLine($"{DateTime.Now.ToString(CultureInfo.InvariantCulture)} - " +
+                                                      "ClientSubscribedTopicHandler Handler Triggered"); });
+        }
+
+        public Task HandleClientUnsubscribedTopicAsync(MqttServerClientUnsubscribedTopicEventArgs eventArgs)
+        {
+            return Task.Run(() => { Console.WriteLine($"{DateTime.Now.ToString(CultureInfo.InvariantCulture)} - " +
+                                                      "ClientSubscribedTopicHandler Handler Triggered"); });
+        }
+
+        #endregion Handle Client Actions
+
+        #region Subscribe Topics
+        
+        [Channel(SaunterSubKiss)] // Create a Channel & Generate AsyncAPI Documentation
+        [SubscribeOperation(typeof(void),
+            Summary = "Subscribes to the 'Kiss' Topic. Which will publish a message every X seconds " +
+                      "to confirm that the MQTTnet Server is still running correctly.")]
+        public void SubscribeKiss()
+        {
             Task.Run(async () =>
             {
-                Console.WriteLine("HandleClientConnectedAsync Handler Triggered");
-                
                 var frameworkName =
                     GetType().Assembly.GetCustomAttribute<TargetFrameworkAttribute>()?.FrameworkName;
 
                 var msg = new MqttApplicationMessageBuilder()
-                    .WithPayload($"MQTTnet hosted on {frameworkName} has started up!")
-                    .WithTopic("MqttService/subscribe/kiss-message");
+                    .WithPayload($"MQTTnet hosted on {frameworkName} has started up!").WithTopic(SaunterSubKiss);
 
-                while (true)
-                {
+                while (connectedClientIds.Count > 0)
                     try
                     {
                         await Server.PublishAsync(msg.Build());
@@ -126,36 +193,11 @@ namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Services
                     }
                     finally
                     {
-                        await Task.Delay(TimeSpan.FromMinutes(5));
+                        await Task.Delay(TimeSpan.FromSeconds(_appSettings.KissIntervalSeconds));
                     }
-                }
-            });
-
-            var clientId = eventArgs.ClientId;
-            return Task.Run(() =>
-            {
-                Server.SubscribeAsync(clientId, "test");
-                
-                Console.WriteLine($"{DateTime.Now.ToString(CultureInfo.InvariantCulture)} " +
-                                  $"MQTT Client Connected:{_newLine} - ClientID = {clientId + _newLine}");
             });
         }
-
-        public Task HandleClientDisconnectedAsync(MqttServerClientDisconnectedEventArgs eventArgs)
-        {
-            return Task.Run(() => { Console.WriteLine("HandleClientDisconnectedAsync Handler Triggered"); });
-        }
-
-        public Task HandleClientSubscribedTopicAsync(MqttServerClientSubscribedTopicEventArgs eventArgs)
-        {
-            return Task.Run(() => { Console.WriteLine("ClientSubscribedTopicHandler Handler Triggered"); });
-        }
-
-        public Task HandleClientUnsubscribedTopicAsync(MqttServerClientUnsubscribedTopicEventArgs eventArgs)
-        {
-            return Task.Run(() => { Console.WriteLine("ClientSubscribedTopicHandler Handler Triggered"); });
-        }
-
-        #endregion Handle Client Actions
+        
+        #endregion Subscribe Topics
     }
 }
