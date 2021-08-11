@@ -1,9 +1,9 @@
 ﻿#region Using Imports
+
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using MQTTnet.AspNetCore.AttributeRouting;
 using Saunter.Attributes;
-using System.Threading.Tasks;
-using MQTTnet;
 
 #endregion Using Imports
 
@@ -14,19 +14,27 @@ namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Controllers.Mq
     public class CatchAllController : MqttBaseController // Inherit from MqttBaseController for convenience functions
     {
         #region Variable Declarations
-        private const string WildCard = "{*topic}";
+
+        // Default Variable Initialization
         private readonly ILogger<CatchAllController> _logger;
-        #endregion Variable Declarations
+
+        // MQTTnet Publish topics
+        private const string MqttNetCatchAll = "{*topic}";
         
+        // Saunter Publish topics
+        private const string SaunterCatchAll = "#";
+        
+        #endregion Variable Declarations
+
         // Initialize the MQTT Controller with full dependency injection support (Like normal AspNetCore controllers)
         public CatchAllController(ILogger<CatchAllController> logger)
         {
             _logger = logger;
         }
 
-        [MqttRoute(WildCard)] // Generate MQTT Attribute Routing for this Topic
-        [Channel("#")] // Create a Channel & Generate AsyncAPI Documentation
-        [PublishOperation(Summary = "Catches all Publishes done to the MQTTnet Broker.")]
+        [MqttRoute(MqttNetCatchAll)] // Generate MQTT Attribute Routing for this Topic
+        [Channel(SaunterCatchAll)] // Create a Channel & Generate AsyncAPI Documentation
+        [PublishOperation(typeof(string), Summary = "Catches all Publishes done to the MQTTnet Broker.")]
         public Task WildCardMatchTopic(string topic)
         {
             // We have access to the MqttContext
