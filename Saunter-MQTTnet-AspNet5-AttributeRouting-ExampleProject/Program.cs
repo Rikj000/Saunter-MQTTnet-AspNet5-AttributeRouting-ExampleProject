@@ -1,8 +1,10 @@
 #region Using Imports
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using MQTTnet.AspNetCore.Extensions;
+
 #endregion Using Imports
 
 namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject
@@ -18,9 +20,9 @@ namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject
         {
             // Load the AppSettings file so we can load in the configured Kestrel Port Settings to host upon
             var config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", optional: false)
+                .AddJsonFile("appsettings.json", false)
                 .Build();
-            
+
             var mqttPipeLinePort = int.Parse(config["AppSettings:KestrelSettings:MqttPipeLinePort"]);
             var httpPipeLinePort = int.Parse(config["AppSettings:KestrelSettings:HttpPipeLinePort"]);
             var httpsPipeLinePort = int.Parse(config["AppSettings:KestrelSettings:HttpsPipeLinePort"]);

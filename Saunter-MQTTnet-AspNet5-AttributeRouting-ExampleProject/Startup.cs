@@ -1,21 +1,23 @@
 #region Using Imports
+
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MQTTnet.AspNetCore;
 using MQTTnet.AspNetCore.AttributeRouting;
 using MQTTnet.AspNetCore.Extensions;
-using MQTTnet.AspNetCore;
+using Saunter;
 using Saunter.AsyncApiSchema.v2;
 using Saunter.Generation;
-using Saunter;
 using Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Controllers.Mqtt;
 using Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Models;
 using Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject.Services;
-using System.Linq;
+
 #endregion Using Imports
 
 /*
@@ -77,7 +79,7 @@ namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject
             services.AddAsyncApiSchemaGeneration(options =>
             {
                 // Specify example type(s) from assemblies to scan.
-                options.AssemblyMarkerTypes = new[] {typeof(ExampleController)};
+                options.AssemblyMarkerTypes = new[] { typeof(Startup) };
 
                 // Build as much (or as little) of the AsyncApi document as you like.
                 // Saunter will generate Channels, Operations, Messages, etc, but you may want to specify Info here.
@@ -87,11 +89,11 @@ namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject
                     {
                         Description =
                             "Example project implementing Saunter with MQTTnet Attribute Routing in ASP.NET 5",
-                        License = new License("Apache 2.0") {Url = "https://www.apache.org/licenses/LICENSE-2.0"}
+                        License = new License("Apache 2.0") { Url = "https://www.apache.org/licenses/LICENSE-2.0" }
                     },
                     Servers =
                     {
-                        {_appSettings.ApplicationName, new Server(_appSettings.ApplicationBaseUrl, "mqtt")}
+                        { _appSettings.ApplicationName, new Server(_appSettings.ApplicationBaseUrl, "mqtt") }
                     }
                 };
             });
@@ -123,7 +125,7 @@ namespace Saunter_MQTTnet_AspNet5_AttributeRouting_ExampleProject
             {
                 // Setup EndPoints for Controller actions
                 endpoints.MapControllers();
-                // Setup MQTT EndPoints for WebSocket connection on: "_appSettings.ApplicationBaseUrl:{port}/mqtt"
+                // Setup MQTT EndPoints for WebSocket connection on: "{_appSettings.ApplicationBaseUrl}:{port}/mqtt"
                 endpoints.MapConnectionHandler<MqttConnectionHandler>(
                     "/mqtt",
                     httpConnectionDispatcherOptions =>
