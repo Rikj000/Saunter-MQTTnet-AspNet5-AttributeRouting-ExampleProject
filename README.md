@@ -35,7 +35,7 @@ An example project that implements following packages in a ASP.NET 5 MQTT Broker
     - PostalCode: `90210`
     - Payload: `int`
   - `ExampleController/publish/test`
-    - Payload: `string`
+    - Payload: `byte`
 - The [**MqttService**](https://github.com/Rikj000/Saunter-MQTTnet-AspNet5-AttributeRouting-ExampleProject/blob/main/Saunter-MQTTnet-AspNet5-AttributeRouting-ExampleProject/Services/MqttService.cs) has been implemented with following **Subscribe Topic**:
   - `MqttService/subscribe/kiss`
     - It will send a Payload every `KissIntervalSeconds` *(Configurable in `appsettings.json`)* for as long as there are clients connected.
